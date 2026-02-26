@@ -1,0 +1,68 @@
+3️⃣ Playbook Ansible – PostgreSQL (Dia 2)
+
+Este playbook executa:
+- Backup
+- Restore
+- Status check
+- Start/Stop
+- Criação de usuário
+- Criação de database
+
+📜 Playbook
+---
+- name: Operacoes Dia 2 - PostgreSQL
+  hosts: postgres_primary
+  become: yes
+  vars:
+    backup_dir: /var/backups/postgresql
+    db_name: discounts
+    db_user: app_user
+    db_password: strong_password
+
+  tasks:
+
+    - name: Garantir diretório de backup
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        owner: postgres
+        group: postgres
+        mode: '0755'
+
+    - name: Backup do banco de dados
+      become_user: postgres
+      command: >
+        pg_dump {{ db_name }} >
+        {{ backup_dir }}/{{ db_name }}_{{ ansible_date_time.date }}.sql
+
+    - name: Verificar status do PostgreSQL
+      service:
+        name: postgresql
+        state: started
+
+    - name: Criar usuário da aplicação
+      become_user: postgres
+      postgresql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        role_attr_flags: LOGIN
+
+    - name: Criar banco de dados
+      become_user: postgres
+      postgresql_db:
+        name: "{{ db_name }}"
+        owner: "{{ db_user }}"
+
+🔎 Por que isso demonstra conhecimento avançado?
+
+- Uso de módulos específicos (postgresql_user, postgresql_db)
+- Separação por host group
+- Controle de privilégios
+- Backup automatizado
+- Idempotência
+
+Pode ser expandido com:
+- WAL archiving
+- PITR restore
+- Healthcheck SQL
+- Validação de replicação
