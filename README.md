@@ -7,8 +7,7 @@ Este repositório contém a proposta arquitetural e automação de operações (
 O projeto está organizado da seguinte forma:
 
 * **cashback-architecture/ansible**: Playbook para automação de tarefas críticas (Backup, Restore, Healthcheck).
-* **cashback-architecture/diagrams/arquitetura.drawio**: Diagramas de arquitetura e fluxo de dados.
-* **cashback-architecture/docs**: Documentação detalhada da arquitetura proposta.
+* **cashback-architecture/diagrams/arquitetura**: Diagramas de arquitetura e fluxo de dados.
 
 ## 📊 Arquitetura Proposta
 
